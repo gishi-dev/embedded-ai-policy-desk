@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>組み込みAIの点検台帳｜見本綴り工房</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="shell masthead">
+      <span>見本綴り工房 <span class="hero-dot"></span> 社員15名・営業／事務／制作</span>
+      <span class="demo-label">架空の公開デモ</span>
+    </div>
+    <div class="shell hero-body">
+      <h1>組み込みAIの点検台帳</h1>
+      <p>業務ツールごとに、AIに渡る情報と処理先を確かめ、利用の判断を記録します。</p>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="card" id="rules-panel" aria-labelledby="rules-title">
+      <div class="section-head">
+        <h2 id="rules-title">点検に使うルール</h2>
+        <label class="version-label">点検の版 <select id="version"></select></label>
+      </div>
+      <ul id="rules"></ul>
+      <p id="version-note" class="callout"></p>
+    </section>
+
+    <section class="card" id="ledger-panel" aria-labelledby="ledger-title">
+      <div class="section-head">
+        <h2 id="ledger-title">業務ツールの一覧</h2>
+        <div class="buttons">
+          <button type="button" id="add">行を追加</button>
+          <button type="button" id="show-import" aria-controls="row-import" aria-expanded="false">CSV・JSONを取り込む</button>
+        </div>
+      </div>
+      <p class="muted">記録のない項目は、提供元の案内・契約・管理画面で確かめます。コードは記録を集計し、法令に合うかは判定しません。</p>
+      <div id="metrics" class="metrics"></div>
+      <div class="scroll" id="ledger"></div>
+    </section>
+
+    <section class="card" id="row-editor" aria-labelledby="edit-title" hidden>
+      <h2 id="edit-title">一覧の行を編集</h2>
+      <form id="edit-form">
+        <div class="form-grid" id="edit-fields"></div>
+        <div class="buttons"><button class="primary" type="submit">一覧に反映</button><button type="button" id="close-edit">閉じる</button></div>
+        <p class="feedback" id="edit-feedback" role="status" hidden></p>
+      </form>
+    </section>
+
+    <section class="card" id="row-import" aria-labelledby="row-import-title" hidden>
+      <h2 id="row-import-title">一覧の取り込み</h2>
+      <p>最大100行。既存の行IDは更新し、新しい行IDは追加します。貼り付けた行は行全体を置き換えます。</p>
+      <p>設定と通知先の種別は行編集と同じ選択肢を使います。AI機能がない行は機能・設定欄を空欄にします。</p>
+      <p class="schema" id="columns"></p>
+      <form id="import-form">
+        <label>CSV（英字の見出し付き）またはJSON（行の配列）<textarea name="rows" rows="5" autocomplete="off" spellcheck="false"></textarea></label>
+        <div class="buttons"><button class="primary" type="submit">一覧を取り込む</button></div>
+        <p class="feedback" id="import-feedback" role="status" hidden></p>
+      </form>
+    </section>
+
+    <section class="card" id="detail-panel" aria-labelledby="detail-title">
+      <div class="section-head"><h2 id="detail-title">機能ごとの点検</h2><button type="button" id="edit">この行を編集</button></div>
+      <div id="detail"></div>
+      <div id="teaching" hidden></div>
+      <div id="review-banner" hidden></div>
+
+      <form id="decision-form" hidden novalidate>
+        <h3>人の判断を記録</h3>
+        <p class="muted">担当・期限・根拠を記入してください。提供元への質問や引き継ぎの下書きは右側から写せます。</p>
+        <div class="form-grid" id="decision-fields"></div>
+        <label class="check"><input type="checkbox" name="reviewed"> 一覧の設定と自分が見た根拠を照合した</label>
+        <div class="buttons"><button type="submit" class="primary">判断を記録</button></div>
+        <p class="feedback" id="decision-feedback" role="status" hidden></p>
+      </form>
+      <div id="previous"></div>
+    </section>
+
+    <section class="card" id="decision-panel" aria-labelledby="decision-title">
+      <h2 id="decision-title">記録した判断</h2>
+      <div class="scroll" id="records"></div>
+    </section>
+
+    <section class="card" id="notice-panel" aria-labelledby="notice-title">
+      <h2 id="notice-title">提供元からの変更のお知らせ</h2>
+      <div id="notice-content"></div>
+      <div class="buttons"><button type="button" class="primary" id="apply-notice">変更のお知らせを取り込む</button></div>
+      <p class="feedback" id="notice-feedback" role="status" hidden></p>
+    </section>
+
+    <details class="card" id="candidate-panel">
+      <summary>質問と引き継ぎ文を別途用意する</summary>
+      <p>架空の一覧と整理の指示をコピーできます。別途用意した文章を照合キー付きのJSONで取り込みます。</p>
+      <label>整理の指示と現在の一覧<textarea id="prompt" readonly rows="5" spellcheck="false"></textarea></label>
+      <div class="buttons"><button type="button" id="copy-prompt">整理の指示をコピー</button></div>
+      <form id="candidate-form">
+        <label>質問・引き継ぎ文の候補JSON<textarea name="input" rows="5" autocomplete="off" spellcheck="false"></textarea></label>
+        <div class="buttons"><button type="submit" class="primary">候補を取り込む</button></div>
+      </form>
+      <p class="feedback" id="candidate-feedback" role="status" hidden></p>
+    </details>
+
+    <section class="card" id="export-panel" aria-labelledby="export-title">
+      <h2 id="export-title">点検票と判断の履歴</h2>
+      <p id="statement"></p>
+      <p class="muted" id="day"></p>
+      <div class="buttons">
+        <button type="button" class="primary" id="finalize">点検票を確定</button>
+        <button type="button" id="download" disabled>JSONをダウンロード</button>
+      </div>
+      <div id="export-feedback" class="export-feedback" role="status"></div>
+      <details id="preview-details" hidden><summary>書き出すJSONを表示</summary><pre id="preview"></pre></details>
+      <details id="history-details"><summary>判断の履歴を表示</summary><div id="history"></div></details>
+    </section>
+  </main>
+  <footer class="shell">組み込みAIの点検台帳 · 架空の公開デモ</footer>
+</body>
+</html>

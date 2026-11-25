@@ -1,0 +1,25 @@
+{
+  "company": "見本綴り工房",
+  "employees": {
+    "E01":"総務", "E02":"管理者", "E03":"営業責任者", "E04":"営業担当",
+    "E05":"営業担当", "E06":"営業担当", "E07":"営業担当", "E08":"事務責任者",
+    "E09":"事務担当", "E10":"会計担当", "E11":"事務担当", "E12":"制作責任者",
+    "E13":"制作担当", "E14":"制作担当", "E15":"制作担当"
+  },
+  "rules": ["公開済みの資料と架空の例文は入力可", "個人情報と未公開の案件資料は入力不可"],
+  "rows": [
+    {"id":"DOC","tool":"見本文庫","category":"文書共有","feature":"文書の要約","vendor":"文庫の提供元","initial":"無効","current":"有効","enableBy":"E02 管理者","scope":"公開専用フォルダーで選んだ本文","processor":"処理事業者A","noticeType":"共有窓口","noticeTo":"E01 総務","backup":"E08 事務責任者","stopMethod":"管理画面の組織設定で要約を無効化","stopBy":"E02 管理者"},
+    {"id":"TASK","tool":"見本段取り帳","category":"タスク管理","feature":"進捗要約","vendor":"段取り帳の提供元","initial":"無効","current":"無効","enableBy":"E02 管理者","scope":"選んだタスクの件名と進捗欄","processor":"処理事業者B","noticeType":"共有窓口","noticeTo":"E08 事務責任者","backup":"E01 総務","stopMethod":"管理画面で進捗要約を無効化","stopBy":"E02 管理者"},
+    {"id":"MEET","tool":"見本会議録","category":"会議の文字起こし","feature":"自動文字起こし","vendor":"会議録の提供元","initial":"有効","current":"有効","enableBy":"E02 管理者","scope":"会議音声と参加者名","processor":null,"noticeType":"未設定","noticeTo":null,"backup":null,"stopMethod":"管理画面で自動文字起こしを無効化","stopBy":"E02 管理者"},
+    {"id":"MAIL","tool":"見本受信箱","category":"メール","feature":"受信メールの要約","vendor":"受信箱の提供元","initial":"無効","current":"利用者が有効","enableBy":"各利用者","scope":"受信メール本文","scopeGap":"添付ファイルが渡るか","processor":null,"noticeType":"担当者個人","noticeTo":"E09 事務担当","backup":null,"stopMethod":null,"stopBy":null},
+    {"id":"CRM","tool":"見本商談棚","category":"顧客管理","feature":"商談メモ要約","vendor":"商談棚の提供元","initial":null,"current":null,"enableBy":null,"scope":null,"processor":null,"noticeType":"共有窓口","noticeTo":"E03 営業責任者","backup":"E04 営業担当","stopMethod":null,"stopBy":"E02 管理者"},
+    {"id":"ACCT","tool":"見本出納帳","category":"会計","feature":null,"vendor":"出納帳の提供元"}
+  ],
+  "notice": {
+    "id":"DOC",
+    "title":"見本文庫からの処理事業者変更のお知らせ",
+    "body":"文書の要約を処理する事業者が、処理事業者Aから処理事業者Cに変わります。初期設定も無効から有効に変わります。現在の組織設定は有効のままです。",
+    "before":{"processor":"処理事業者A","initial":"無効"},
+    "after":{"processor":"処理事業者C","initial":"有効"}
+  }
+}
